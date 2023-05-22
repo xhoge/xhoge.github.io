@@ -167,8 +167,8 @@
           const row = document.createElement('tr');
           row.innerHTML = `
             <td>${yearMonth}-${day}</td>
-            <td><input type="time" class="start-time" required></td>
-            <td><input type="time" class="end-time" required></td>
+            <td><input type="time" class="start-time" value="09:30" required></td>
+            <td><input type="time" class="end-time" value="18:15" required></td>
             <td><button class="delete-btn">削除</button></td>
           `;
           tbody.appendChild(row);
@@ -183,6 +183,7 @@
           const cursor = event.target.result;
           if (cursor) {
             const attendance = cursor.value;
+            console.log(attendance);
             const row = tbody.querySelector(`tr:nth-child(${attendance.date.slice(-2)})`);
             if (row) {
               row.querySelector('.start-time').value = attendance.startTime;
@@ -222,11 +223,6 @@
           const endTimeInput = attendanceTable.querySelector(`tr:nth-child(${day}) .end-time`);
           const startTime = startTimeInput.value;
           const endTime = endTimeInput.value;
-
-          // 開始時間または終了時間が未入力の場合はスキップ
-          if (!startTime || !endTime) {
-            continue;
-          }
 
           const data = { date: date, startTime: startTime, endTime: endTime, yearMonth: yearMonth };
           const addRequest = objectStore.add(data);
@@ -281,8 +277,7 @@
 
           const transaction = db.transaction(storeName, 'readwrite');
           const objectStore = transaction.objectStore(storeName);
-          const index = objectStore.index('yearMonth');
-          const request = index.openCursor(IDBKeyRange.only(date));
+          const request = objectStore.openCursor(IDBKeyRange.only(date));
 
           request.onsuccess = (event) => {
             const cursor = event.target.result;

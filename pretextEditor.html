@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <style>
+.container {
+  display: flex;
+  margin-left:200px;
+}
+
+.left-pane {
+  height:500px;
+  padding: 10px;
+  position: relative;
+  width:50%;
+}
+.left-menu {
+  width:50%;
+  height:50px;
+  position: relative;
+}
+#textInput {
+  width: 100%;
+  height: 450px;
+  border: 1px solid #ccc;
+  outline: none;
+  background-color: black;
+  color:white;
+}
+
+.right-pane {
+  width:50%;
+  height:500px;
+  padding: 10px;
+}
+#displayArea {
+  width: 100%;
+  height: 500px;
+  border: 1px solid #ccc;
+  overflow: auto;
+}
+
+button {
+  margin-top: 10px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.checkmodal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  width: 500px;
+  height: 300px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+li:hover{
+    background-color: #8cd4dd;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.custombtn{
+    width:150px;
+    height:30px;
+    font-size:14px;
+}
+        </style>
+          <meta http-equiv="Pragma" content="no-cache">
+          <meta http-equiv="Cache-Control" content="no-cache">
+        <link rel="stylesheet" href="css/style.css?v001">
+    </head>
+    <body>
+      <div id="sidebar"></div>
+      <!-- HTML -->
+<div class="container">
+    <div class="left-pane">
+        <div class="left-menu"><button type="button" class="custombtn" onclick="openModal()">テンプレートHTML</button></div>
+        <div id="textInput" contenteditable="true" oninput="updateDisplay()" placeholder="ここにテキストを入力してください"></div>
+    </div>
+    <div class="right-pane">
+      <div id="displayArea"></div>
+    </div>
+  </div>
+
+  <!-- モーダルUI -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h2 style="text-align: center;">テンプレートを選択してください</h2>
+      <ul>
+        <li onclick="selectTemplate('テンプレート1')">テンプレート1</li>
+        <li onclick="selectTemplate('テンプレート2')">テンプレート2</li>
+        <li onclick="selectTemplate('テンプレート3')">テンプレート3</li>
+      </ul>
+    </div>
+  </div>
+  <div id="checkmodal" class="checkmodal">
+    <div class="modal-content">
+      <h2 style="text-align: center;">確認</h2>
+    </div>
+  </div>
+  <script src="./script/script.js"></script>
+<script>
+createSidebar();
+function openModal() {
+  var modal = document.getElementById("modal");
+  modal.style.display = "block";
+}
+
+function selectTemplate(template) {
+  var textInput = document.getElementById("textInput");
+  textInput.innerText = template;
+
+  var modal = document.getElementById("modal");
+  modal.style.display = "none";
+  updateDisplay();
+}
+
+function updateDisplay() {
+  var textInput = document.getElementById("textInput");
+  var displayArea = document.getElementById("displayArea");
+  displayArea.innerHTML = textInput.value;
+}
+
+var textInput = document.getElementById("textInput");
+textInput.addEventListener("input", updateDisplay);
+
+// JavaScript
+function updateDisplay() {
+  var textInput = document.getElementById("textInput");
+  var displayArea = document.getElementById("displayArea");
+
+  displayArea.innerHTML = textInput.innerText;
+}
+      </script>
+    </body>
+</html>

@@ -3,12 +3,6 @@
 <head>
   <title>xhoge -HOME</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
     .container {
       max-width: 600px;
       margin: 0 auto;
@@ -99,9 +93,15 @@
       overflow: auto;
     }
   </style>
+  <link rel="stylesheet" href="css/style.css?v01">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">
 </head>
 <body>
   <div class="container">
+    <div id="sidebar"></div>
     <h1>タイムキープ</h1>
 
     <form id="entryForm">
@@ -125,8 +125,10 @@
       <input type="submit" value="更新">
     </div>
   </div>
-
+  <script src="./script/script.js?v01"></script>
   <script>
+    createSidebar();
+
     // IndexedDBの設定
     const dbName = 'attendanceDB';
     const storeName = 'attendanceStore';

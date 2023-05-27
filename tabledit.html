@@ -1,120 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>IndexedDBへのテーブルデータの格納</title>
+  <title>編集可能なテーブル</title>
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Cache-Control" content="no-cache">
-  <link rel="stylesheet" href="css/style.css?v001">
-  <script src="./script/script.js?v001"></script>
+  <link rel="stylesheet" href="css/style.css?v01">
   <style>
     .content{
-        margin-left:200px;
+      margin-left:200px;
     }
+    #columns {
+  float: left;
+  width: 200px;
+  padding: 10px;
+}
+
+#settings {
+  float: right;
+  width: 200px;
+  padding: 10px;
+}
+
+#table {
+  margin: 0 auto;
+  padding: 10px;
+  clear: both;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 5px;
+  border: 1px solid black;
+}
   </style>
 </head>
 <body>
-    <div id="sidebar"></div>
-    <div class="content">
-        <table id="myTable">
-            <thead>
-              <tr>
-                <th data-keyname="column1">Column 1</th>
-                <th data-keyname="column2">Column 2</th>
-                <th data-keyname="column3">Column 3</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td data-keyname="column1">Data 1-1</td>
-                <td data-keyname="column2">Data 1-2</td>
-                <td data-keyname="column3">Data 1-3</td>
-              </tr>
-              <tr>
-                <td data-keyname="column1">Data 2-1</td>
-                <td data-keyname="column2">Data 2-2</td>
-                <td data-keyname="column3">Data 2-3</td>
-              </tr>
-              <tr>
-                <td data-keyname="column1">Data 3-1</td>
-                <td data-keyname="column2">Data 3-2</td>
-                <td data-keyname="column3">Data 3-3</td>
-              </tr>
-            </tbody>
-          </table>
-        
-          <button onclick="updateTableToIndexedDB()">更新</button>
+  <div id="sidebar"></div>
+  <div class="content">
+    <div id="columns">
+      <div class="column">
+        <input type="text" class="column-input" placeholder="カラム名">
+      </div>
     </div>
-<script>
-    createSidebar();
-  // テーブルの更新ボタンがクリックされたときの処理
-function updateTableToIndexedDB() {
-  // IndexedDBのデータベース名とオブジェクトストア名
-  const dbName = "myDatabase";
-  const storeName = "myTable";
-
-  // テーブル要素の取得
-  const table = document.getElementById("myTable");
-
-  // IndexedDBのオープン
-  const request = indexedDB.open(dbName);
-
-  request.onerror = function(event) {
-    console.error("IndexedDBのオープンに失敗しました");
-  };
-
-  request.onsuccess = function(event) {
-    const db = event.target.result;
-
-    // トランザクションの開始
-    const transaction = db.transaction(storeName, "readwrite");
-    const store = transaction.objectStore(storeName);
-
-    // テーブルの行を走査してデータをIndexedDBに格納
-    const rows = table.getElementsByTagName("tr");
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const rowData = {};
-
-      // カラムのデータ属性を取得してキーと値をセット
-      const cells = row.getElementsByTagName("td");
-      for (let j = 0; j < cells.length; j++) {
-        const cell = cells[j];
-        const key = cell.getAttribute("data-keyname");
-        const value = cell.textContent;
-        rowData[key] = value;
-      }
-
-      // IndexedDBにデータを追加
-      const addRequest = store.add(rowData);
-      addRequest.onerror = function(event) {
-        console.error("データの追加に失敗しました");
-      };
-    }
-
-    transaction.oncomplete = function() {
-      console.log("データの追加が完了しました");
-    };
-
-    transaction.onerror = function(event) {
-      console.error("トランザクション中にエラーが発生しました");
-    };
-
-    // トランザクションの終了とデータベースのクローズ
-    transaction.oncomplete = function() {
-      db.close();
-    };
-  };
-
-  request.onupgradeneeded = function(event) {
-    const db = event.target.result;
-
-    // オブジェクトストアの作成
-    if (!db.objectStoreNames.contains(storeName)) {
-      db.createObjectStore(storeName, { keyPath: "id", autoIncrement: true });
-    }
-  };
+    
+    <!-- プラスボタン -->
+    <button id="add-column-btn">＋</button>
+    
+    <!-- 表示名、横幅、立幅の設定フォーム -->
+    <div id="settings">
+      <label>表示名:</label>
+      <input type="text" id="display-name">
+    
+      <label>横幅(px):</label>
+      <input type="number" id="width">
+    
+      <label>立幅(px):</label>
+      <input type="number" id="height">
+    </div>
+    
+    <!-- テーブル描画エリア -->
+    <div id="table">
+      <table>
+        <caption>テーブル</caption>
+        <tr>
+          <th>カラム名1</th>
+          <th>カラム名2</th>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <script src="./script/script.js"></script>
+  <script>
+  createSidebar();
+function addColumn() {
+  var column = document.createElement('div');
+  column.className = 'column';
+  column.innerHTML = '<input type="text" class="column-input" placeholder="カラム名">';
+  document.getElementById('columns').appendChild(column);
 }
-  </script>
 
+// カラムの削除
+function removeColumn(column) {
+  document.getElementById('columns').removeChild(column);
+}
+
+// 表示名、横幅、立幅の設定の変更
+function updateSettings() {
+  var displayName = document.getElementById('display-name').value;
+  var width = document.getElementById('width').value;
+  var height = document.getElementById('height').value;
+
+  document.getElementById('table').innerHTML = '<table>' +
+    '<caption>' + displayName + '</caption>' +
+    '<tr><th>カラム名1</th><th>カラム名2</th></tr>' +
+    '<tr><td>&nbsp;</td><td>&nbsp;</td></tr>' +
+    '</table>';
+
+  document.getElementById('table').style.width = width + 'px';
+  document.getElementById('table').style.height = height + 'px';
+}
+
+// プラスボタンにイベントリスナーを追加
+document.getElementById('add-column-btn').addEventListener('click', addColumn);
+
+// 表示名、横幅、立幅の設定にイベントリスナーを追加
+document.getElementById('display-name').addEventListener('input', updateSettings);
+document.getElementById('width').addEventListener('input', updateSettings);
+document.getElementById('height').addEventListener('input', updateSettings);
+</script>
 </body>
 </html>

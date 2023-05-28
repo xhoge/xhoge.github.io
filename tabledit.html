@@ -11,10 +11,9 @@
     }
     #columns {
   float: left;
-  width: 200px;
+  width: 100%;
   padding: 10px;
 }
-
 #settings {
   float: right;
   width: 200px;
@@ -36,85 +35,136 @@ td {
   padding: 5px;
   border: 1px solid black;
 }
+
+.column-input{
+  display: inline-block;
+}
+.width-input{
+  display: inline-block;
+}
+.height-input{
+  display: inline-block;
+}
   </style>
 </head>
 <body>
   <div id="sidebar"></div>
   <div class="content">
-    <div id="columns">
-      <div class="column">
-        <input type="text" class="column-input" placeholder="カラム名">
-      </div>
-    </div>
-    
-    <!-- プラスボタン -->
-    <button id="add-column-btn">＋</button>
-    
-    <!-- 表示名、横幅、立幅の設定フォーム -->
-    <div id="settings">
-      <label>表示名:</label>
-      <input type="text" id="display-name">
-    
-      <label>横幅(px):</label>
-      <input type="number" id="width">
-    
-      <label>立幅(px):</label>
-      <input type="number" id="height">
-    </div>
-    
-    <!-- テーブル描画エリア -->
-    <div id="table">
-      <table>
-        <caption>テーブル</caption>
-        <tr>
-          <th>カラム名1</th>
-          <th>カラム名2</th>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-      </table>
-    </div>
+<!-- カラム編集エリア -->
+<div id="columns">
+  <!-- カラムの追加はここで行います -->
+</div>
+
+<!-- プラスボタン -->
+<button id="add-column-btn">＋</button>
+
+<!-- テーブル名、横幅、立幅の設定フォーム -->
+<div id="settings">
+  <label>テーブル名:</label>
+  <input type="text" id="table-name">
+
+  <label>横幅(px):</label>
+  <input type="number" id="width">
+
+  <label>立幅(px):</label>
+  <input type="number" id="height">
+</div>
+
+<!-- テーブル描画エリア -->
+<div id="table">
+  <!-- テーブルはJavaScriptで生成します -->
+</div>
   </div>
   <script src="./script/script.js"></script>
   <script>
   createSidebar();
+// カラムの追加
 function addColumn() {
   var column = document.createElement('div');
   column.className = 'column';
-  column.innerHTML = '<input type="text" class="column-input" placeholder="カラム名">';
+  column.innerHTML = `
+    <input type="text" class="column-input" placeholder="カラム名">
+    <input type="number" class="width-input" placeholder="横幅(%)">
+    <input type="number" class="height-input" placeholder="立幅(px)">
+    <input type="checkbox" class="hide-input">非表示
+    <button class="remove-column-btn">削除</button>
+  `;
   document.getElementById('columns').appendChild(column);
+
+  // 削除ボタンにイベントリスナーを追加
+  column.querySelector('.remove-column-btn').addEventListener('click', function() {
+    removeColumn(column);
+  });
+
+  // カラム情報の変更にイベントリスナーを追加
+  column.querySelectorAll('.column-input, .width-input, .height-input, .hide-input').forEach(function(input) {
+    input.addEventListener('input', drawTable);
+  });
 }
 
 // カラムの削除
 function removeColumn(column) {
   document.getElementById('columns').removeChild(column);
+  drawTable();
 }
 
-// 表示名、横幅、立幅の設定の変更
-function updateSettings() {
-  var displayName = document.getElementById('display-name').value;
+// テーブルの描画
+function drawTable() {
+  var tableName = document.getElementById('table-name').value;
   var width = document.getElementById('width').value;
   var height = document.getElementById('height').value;
 
-  document.getElementById('table').innerHTML = '<table>' +
-    '<caption>' + displayName + '</caption>' +
-    '<tr><th>カラム名1</th><th>カラム名2</th></tr>' +
-    '<tr><td>&nbsp;</td><td>&nbsp;</td></tr>' +
-    '</table>';
+  var columnElements = document.getElementsByClassName('column');
+  var columnNames = [];
+  var columnWidths = [];
+  var columnHeights = [];
+  var columnHidden = [];
 
+  for (var i = 0; i < columnElements.length; i++) {
+    var column = columnElements[i];
+    columnNames.push(column.querySelector('.column-input').value);
+    columnWidths.push(column.querySelector('.width-input').value);
+    columnHeights.push(column.querySelector('.height-input').value);
+    columnHidden.push(column.querySelector('.hide-input').checked);
+  }
+
+  var tableHTML = '<table>' +
+    '<caption>' + tableName + '</caption>' +
+    '<tr>';
+
+  for (var i = 0; i < columnNames.length; i++) {
+    if (!columnHidden[i]) {
+      tableHTML += '<th style="width:' + columnWidths[i] + '%;height:' + columnHeights[i] + 'px;">' + columnNames[i] + '</th>';
+    }
+  }
+
+  tableHTML += '</tr><tr>';
+
+  for (var i = 0; i < columnNames.length; i++) {
+    if (!columnHidden[i]) {
+      tableHTML += '<td>&nbsp;</td>';
+    }
+  }
+
+  tableHTML += '</tr></table>';
+
+  document.getElementById('table').innerHTML = tableHTML;
   document.getElementById('table').style.width = width + 'px';
   document.getElementById('table').style.height = height + 'px';
+  document.getElementById('table').style.border = 'solid 2px';
 }
 
 // プラスボタンにイベントリスナーを追加
 document.getElementById('add-column-btn').addEventListener('click', addColumn);
 
-// 表示名、横幅、立幅の設定にイベントリスナーを追加
-document.getElementById('display-name').addEventListener('input', updateSettings);
-document.getElementById('width').addEventListener('input', updateSettings);
-document.getElementById('height').addEventListener('input', updateSettings);
+// テーブル名、横幅、立幅の設定にイベントリスナーを追加
+document.getElementById('table-name').addEventListener('input', drawTable);
+document.getElementById('width').addEventListener('input', drawTable);
+document.getElementById('height').addEventListener('input', drawTable);
+
+// 初期描画
+drawTable();
+addColumn();
 </script>
 </body>
 </html>

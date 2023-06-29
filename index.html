@@ -1,297 +1,94 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>xhoge -HOME</title>
-  <style>
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      position: relative;
-      min-height: 100vh;
-      box-sizing: border-box;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    form {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    input[type="text"],
-    input[type="time"],
-    input[type="submit"] {
-      width: 100px;
-      padding: 5px;
-      font-size: 16px;
-    }
-
-    input[type="submit"] {
-      display: inline-block;
-      padding: 10px;
-      font-size: 16px;
-      background-color: #f44336;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th,
-    td {
-      padding: 8px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f44336;
-      color: #fff;
-    }
-
-    td:first-child {
-      text-align: left;
-    }
-
-    .delete-btn {
-      background-color: #f44336;
-      color: #fff;
-      border: none;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-
-    .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #f5f5f5;
-      padding: 10px;
-      box-sizing: border-box;
-      text-align: right;
-    }
-
-    .footer input[type="submit"] {
-      width: 200px;
-      display: inline-block;
-    }
-
-    #content{
-      overflow: auto;
-    }
-  </style>
-  <link rel="stylesheet" href="css/style.css?v01">
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Cache-Control" content="no-cache">
-</head>
-<body>
-  <div class="container">
-    <div id="sidebar"></div>
-    <h1>タイムキープ</h1>
-
-    <form id="entryForm">
-      <input type="month" id="yearMonth" required>
-      <input type="submit" value="更新">
-    </form>
-    <table id="attendanceTable">
-      <thead>
-        <tr>
-          <th>日付</th>
-          <th>開始時間</th>
-          <th>終了時間</th>
-          <th>削除</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <div id="content">
-  </div>
-    <div class="footer">
-      <input type="submit" value="更新">
-    </div>
-  </div>
-  <script src="./script/script.js?v01"></script>
-  <script>
-    createSidebar();
-
-    // IndexedDBの設定
-    const dbName = 'attendanceDB';
-    const storeName = 'attendanceStore';
-    const request = indexedDB.open(dbName, 1);
-
-    request.onerror = (event) => {
-      console.log('IndexedDBのオープンでエラーが発生しました');
-    };
-
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
-    };
-
-    request.onsuccess = (event) => {
-      const db = event.target.result;
-      const entryForm = document.getElementById('entryForm');
-      const attendanceTable = document.getElementById('attendanceTable');
-      const tbody = attendanceTable.querySelector('tbody');
-      const footerButton = document.querySelector('.footer input[type="submit"]');
-
-      // 年月の入力フォームを取得
-      const yearMonthInput = document.getElementById('yearMonth');
-
-      // 勤怠データの登録
-      entryForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const yearMonth = yearMonthInput.value;
-        const [year, month] = yearMonth.split('-');
-        const lastDay = new Date(year, month, 0).getDate();
-
-        // テーブルの既存データを削除
-        tbody.innerHTML = '';
-
-        // 1か月分の入力項目を生成
-        for (let day = 1; day <= lastDay; day++) {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${yearMonth}-${day}</td>
-            <td><input type="time" class="start-time" value="09:30" required></td>
-            <td><input type="time" class="end-time" value="18:15" required></td>
-            <td><button class="delete-btn">削除</button></td>
-          `;
-          tbody.appendChild(row);
-        
-        // 当月のデータを表示
-        const transaction = db.transaction(storeName, 'readonly');
-        const objectStore = transaction.objectStore(storeName);
-        //const index = objectStore.index('yearMonth');
-        const request = objectStore.openCursor(IDBKeyRange.only(yearMonth));
-
-        request.onsuccess = (event) => {
-          const cursor = event.target.result;
-          if (cursor) {
-            const attendance = cursor.value;
-            console.log(attendance);
-            const row = tbody.querySelector(`tr:nth-child(${attendance.date.slice(-2)})`);
-            if (row) {
-              row.querySelector('.start-time').value = attendance.startTime;
-              row.querySelector('.end-time').value = attendance.endTime;
+    <head>
+        <title>xhoge -HOME</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <style>
+            .container {
+              display: grid;
+              grid-template-columns: 1fr;
+              grid-template-rows: auto 1fr;
+              height: 100vh;
+              justify-items: center;
+              align-items: center;
             }
-            cursor.continue();
-          }
-        };
-        }
-      });
-
-      // データの更新
-      footerButton.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        const yearMonth = yearMonthInput.value;
-        const [year, month] = yearMonth.split('-');
-        const lastDay = new Date(year, month, 0).getDate();
-
-        const transaction = db.transaction(storeName, 'readwrite');
-        const objectStore = transaction.objectStore(storeName);
-
-        // 当月のデータを削除
-        const deleteRequest = objectStore.openCursor(IDBKeyRange.only(yearMonth));
-        deleteRequest.onsuccess = (event) => {
-          const cursor = event.target.result;
-          if (cursor) {
-            cursor.delete();
-            cursor.continue();
-          }
-        };
-
-        // 新しいデータを登録
-        for (let day = 1; day <= lastDay; day++) {
-          const date = `${yearMonth}-${day}`;
-          const startTimeInput = attendanceTable.querySelector(`tr:nth-child(${day}) .start-time`);
-          const endTimeInput = attendanceTable.querySelector(`tr:nth-child(${day}) .end-time`);
-          const startTime = startTimeInput.value;
-          const endTime = endTimeInput.value;
-
-          const data = { date: date, startTime: startTime, endTime: endTime, yearMonth: yearMonth };
-          const addRequest = objectStore.add(data);
-          addRequest.onsuccess = (event) =>{
-            console.log('勤怠データが登録されました');
-          };
-          addRequest.onerror = (event) => {
-            console.log('勤怠データの登録でエラーが発生しました');
-          };
-        }
-      });
-
-      // データの表示
-      const showAttendanceData = () => {
-        const yearMonth = yearMonthInput.value;
-        const [year, month] = yearMonth.split('-');
-        const lastDay = new Date(year, month, 0).getDate();
-
-        const transaction = db.transaction(storeName, 'readonly');
-        const objectStore = transaction.objectStore(storeName);
-        //const index = objectStore.index('yearMonth');
-        const request = objectStore.openCursor(IDBKeyRange.only(yearMonth));
-
-        request.onsuccess = (event) =>{
-          const cursor = event.target.result;
-          if (cursor) {
-            const attendance = cursor.value;
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${attendance.date}</td>
-              <td><input type="time" class="start-time" value="${attendance.startTime}" required></td>
-              <td><input type="time" class="end-time" value="${attendance.endTime}" required></td>
-              <td><button class="delete-btn">削除</button></td>
-            `;
-            tbody.appendChild(row);
-            cursor.continue();
-          }
-        };
-      };
-
-      // 初回表示
-      const currentDate = new Date();
-      const currentYearMonth = currentDate.toISOString().slice(0, 7);
-      yearMonthInput.value = currentYearMonth;
-      showAttendanceData();
-
-      // データの削除
-      attendanceTable.addEventListener('click', (event) => {
-        if (event.target.classList.contains('delete-btn')) {
-          const row = event.target.closest('tr');
-          const date = row.querySelector('td:first-child').textContent;
-
-          const transaction = db.transaction(storeName, 'readwrite');
-          const objectStore = transaction.objectStore(storeName);
-          const request = objectStore.openCursor(IDBKeyRange.only(date));
-
-          request.onsuccess = (event) => {
-            const cursor = event.target.result;
-            if (cursor) {
-              cursor.delete();
-              row.remove();
-              console.log('勤怠データが削除されました');
+            
+            header {
+              text-align: center;
             }
-          };
-        }
-      });
-    };
-  </script>
-</body>
+            
+            main {
+              display: grid;
+              grid-template-columns: 1fr;
+              grid-gap: 20px;
+              max-width: 600px;
+              width: 100%;
+            }
+            
+            .accordion {
+              border: 1px solid #ddd;
+              border-radius: 4px;
+            }
+            
+            .accordion-header {
+              background-color: #f5f5f5;
+              padding: 10px;
+              cursor: pointer;
+            }
+            
+            .accordion-content {
+              display: none;
+              padding: 10px;
+            }
+            
+            .accordion.open .accordion-content {
+              display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+          <header>
+            <h1>自己紹介</h1>
+          </header>
+          <main>
+            <section class="accordion">
+              <h2 class="accordion-header">基本情報</h2>
+              <div class="accordion-content">
+                <p>名前：山田太郎</p>
+                <p>年齢：25歳</p>
+                <p>趣味：読書、旅行</p>
+              </div>
+            </section>
+            <section class="accordion">
+              <h2 class="accordion-header">経歴</h2>
+              <div class="accordion-content">
+                <p>大学：〇〇大学</p>
+                <p>学部：情報工学</p>
+                <p>職歴：〇〇株式会社（2018年〜現在）</p>
+              </div>
+            </section>
+            <section class="accordion">
+              <h2 class="accordion-header">スキル</h2>
+              <div class="accordion-content">
+                <p>プログラミング言語：JavaScript, Python</p>
+                <p>フレームワーク：React, Django</p>
+                <p>データベース：MySQL, MongoDB</p>
+              </div>
+            </section>
+          </main>
+        </div>
+        <script>
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+              header.addEventListener('click', () => {
+                const accordion = header.parentElement;
+                accordion.classList.toggle('open');
+              });
+            });
+        </script>
+      </body>
 </html>

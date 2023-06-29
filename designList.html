@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Button Design Samples</title>
+  <style>
+    /* 共通のスタイル (外部スタイルシート) */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .button-sample {
+      margin: 10px;
+    }
+    
+    /* ボタンのスタイル (外部スタイルシート) */
+    .sample-button {
+      padding: 10px 20px;
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    /* モーダルダイアログのスタイル (外部スタイルシート) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 4px;
+      width: 80%;
+      max-width: 600px;
+      overflow-wrap: break-word;
+    }
+    
+    .modal-content h2 {
+      margin-top: 0;
+    }
+    
+    .modal-content pre {
+      white-space: pre-wrap;
+    }
+    
+    .close-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    
+    .close-btn:hover {
+      background-color: #d32f2f;
+    }
+    
+    /* ポップアップUIのスタイル (内部スタイルシート) */
+    .popup-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .popup-content button {
+      margin: 10px;
+    }
+    
+    .popup-code {
+      display: none;
+    }
+    
+    .popup-code.active {
+      display: block;
+    }
+    
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      background-color: #ddd;
+      color: #333;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+    
+    .tab.active {
+      background-color: #2196f3;
+      color: white;
+    }
+  </style>
+  <script>
+    var buttonData = {
+      'button1': {
+        'cssCode': '.sample-button {\n  background-color: blue;\n  color: white;\n  border: none;\n  border-radius: 4px;\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n}',
+        'htmlCode': '&lt;button class=&quot;sample-button&quot;&gt;\n  Sample Button 1\n&lt;/button&gt;',
+        'cssDescription': 'The button has the following CSS styles:\n- Background color: blue\n- Text color: white\n- No border\n- Border radius: 4px\n- Padding: 10px 20px\n- Font size: 16px\n- Cursor: pointer',
+        'jsDescription': 'No JavaScript code is required for this button.'
+      },
+      'button2': {
+        'cssCode': '.sample-button {\n  background-color: red;\n  color: white;\n  border: none;\n  border-radius: 4px;\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n}',
+        'htmlCode': '&lt;button class=&quot;sample-button&quot;&gt;\n  Sample Button 2\n&lt;/button&gt;',
+        'cssDescription': 'The button has the following CSS styles:\n- Background color: red\n- Text color: white\n- No border\n- Border radius: 4px\n- Padding: 10px 20px\n- Font size: 16px\n- Cursor: pointer',
+        'jsDescription': 'No JavaScript code is required for this button.'
+      },
+      'button3': {
+        'cssCode': '.sample-button {\n  background-color: green;\n  color: white;\n  border: none;\n  border-radius: 4px;\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n}',
+        'htmlCode': '&lt;button class=&quot;sample-button&quot;&gt;\n  Sample Button 3\n&lt;/button&gt;',
+        'cssDescription': 'The button has the following CSS styles:\n- Background color: green\n- Text color: white\n- No border\n- Border radius: 4px\n- Padding: 10px 20px\n- Font size: 16px\n- Cursor: pointer',
+        'jsDescription': 'No JavaScript code is required for this button.'
+      }
+    };
+    
+    function showModal(buttonId) {
+      var modal = document.getElementById("modal");
+      var codeElement = document.getElementById("code");
+      var descriptionElement = document.getElementById("description");
+      var tabs = document.getElementsByClassName("tab");
+      
+      var button = buttonData[buttonId];
+      var cssCode = button.cssCode;
+      var htmlCode = button.htmlCode;
+      var cssDescription = button.cssDescription;
+      var jsDescription = button.jsDescription;
+      
+      codeElement.innerHTML = '<pre class="popup-code active">' + htmlCode + '</pre>' +
+                              '<pre class="popup-code">' + cssCode + '</pre>' +
+                              '<pre class="popup-code">' + jsDescription + '</pre>';
+      descriptionElement.innerHTML = '<p class="popup-code active">' + cssDescription + '</p>' +
+                                     '<p class="popup-code">' + jsDescription + '</p>';
+      
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+      }
+      
+      tabs[0].classList.add("active");
+      
+      modal.style.display = "block";
+    }
+    
+    function closeModal() {
+      var modal = document.getElementById("modal");
+      modal.style.display = "none";
+    }
+    
+    function showTab(type) {
+      var codeElements = document.getElementsByClassName("popup-code");
+      var tabs = document.getElementsByClassName("tab");
+      
+      for (var i = 0; i < codeElements.length; i++) {
+        codeElements[i].classList.remove("active");
+      }
+      
+      for (var j = 0; j < tabs.length; j++) {
+        tabs[j].classList.remove("active");
+      }
+      
+      if (type === "html") {
+        tabs[0].classList.add("active");
+        codeElements[0].classList.add("active");
+      } else if (type === "css") {
+        tabs[1].classList.add("active");
+        codeElements[1].classList.add("active");
+      } else if (type === "js") {
+        tabs[2].classList.add("active");
+        codeElements[2].classList.add("active");
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Button Design Samples</h1>
+    
+    <div class="button-sample">
+      <button class="sample-button">Sample Button 1</button>
+      <button onclick="showModal('button1')">コード参照</button>
+    </div>
+    
+    <div class="button-sample">
+      <button class="sample-button">Sample Button 2</button>
+      <button onclick="showModal('button2')">コード参照</button>
+    </div>
+    
+    <div class="button-sample">
+      <button class="sample-button">Sample Button 3</button>
+      <button onclick="showModal('button3')">コード参照</button>
+    </div>
+    
+    <!-- モーダルダイアログ -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2>Code:</h2>
+        <div id="code" class="popup-content">
+          <pre class="popup-code active"></pre>
+          <pre class="popup-code"></pre>
+          <pre class="popup-code"></pre>
+        </div>
+        
+        <h2>Description:</h2>
+        <div id="description" class="popup-content">
+          <p class="popup-code active"></p>
+          <p class="popup-code"></p>
+          <p class="popup-code"></p>
+        </div>
+        
+        <div class="tabs">
+          <button class="tab active" onclick="showTab('html')">HTML</button>
+          <button class="tab" onclick="showTab('css')">CSS</button>
+          <button class="tab" onclick="showTab('js')">JavaScript</button>
+        </div>
+        
+        <button class="close-btn" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

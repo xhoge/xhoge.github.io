@@ -1,7 +1,0 @@
-{
-    "menuItems": [
-      { "text": "タイムキーパ", "link": "index.html" },
-      { "text": "HTMLエディタ", "link": "pretextEditor.html" },
-      { "text": "TableUpdate", "link": "tabledit.html" }
-    ]
-  }

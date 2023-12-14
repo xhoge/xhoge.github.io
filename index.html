@@ -1,94 +1,137 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>xhoge -HOME</title>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta http-equiv="Pragma" content="no-cache">
-        <meta http-equiv="Cache-Control" content="no-cache">
-        <style>
-            .container {
-              display: grid;
-              grid-template-columns: 1fr;
-              grid-template-rows: auto 1fr;
-              height: 100vh;
-              justify-items: center;
-              align-items: center;
-            }
-            
-            header {
-              text-align: center;
-            }
-            
-            main {
-              display: grid;
-              grid-template-columns: 1fr;
-              grid-gap: 20px;
-              max-width: 600px;
-              width: 100%;
-            }
-            
-            .accordion {
-              border: 1px solid #ddd;
-              border-radius: 4px;
-            }
-            
-            .accordion-header {
-              background-color: #f5f5f5;
-              padding: 10px;
-              cursor: pointer;
-            }
-            
-            .accordion-content {
-              display: none;
-              padding: 10px;
-            }
-            
-            .accordion.open .accordion-content {
-              display: block;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-          <header>
-            <h1>自己紹介</h1>
-          </header>
-          <main>
-            <section class="accordion">
-              <h2 class="accordion-header">基本情報</h2>
-              <div class="accordion-content">
-                <p>名前：山田太郎</p>
-                <p>年齢：25歳</p>
-                <p>趣味：読書、旅行</p>
-              </div>
-            </section>
-            <section class="accordion">
-              <h2 class="accordion-header">経歴</h2>
-              <div class="accordion-content">
-                <p>大学：〇〇大学</p>
-                <p>学部：情報工学</p>
-                <p>職歴：〇〇株式会社（2018年〜現在）</p>
-              </div>
-            </section>
-            <section class="accordion">
-              <h2 class="accordion-header">スキル</h2>
-              <div class="accordion-content">
-                <p>プログラミング言語：JavaScript, Python</p>
-                <p>フレームワーク：React, Django</p>
-                <p>データベース：MySQL, MongoDB</p>
-              </div>
-            </section>
-          </main>
-        </div>
-        <script>
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            accordionHeaders.forEach(header => {
-              header.addEventListener('click', () => {
-                const accordion = header.parentElement;
-                accordion.classList.toggle('open');
-              });
-            });
-        </script>
-      </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Page</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card-group {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .card {
+            width: 30%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            background-color: #eee;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .card-content {
+            padding: 10px;
+        }
+
+        .card h3 {
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .card p {
+            margin: 0;
+        }
+
+        #filterInput {
+            margin-top: 20px;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Link Page</h1>
+
+<input type="text" id="filterInput" placeholder="Filter by title..." oninput="filterLinks()">
+
+<div class="card-group" id="cardGroup"></div>
+
+<script>
+  const links = [
+    {
+        "group": "Twitter",
+        "title": "X",
+        "url": "https://twitter.com/home",
+        "memo": "Search engine"
+    }
+    // Add more links as needed
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const cardGroup = document.getElementById('cardGroup');
+
+    for (const link of links) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+
+        const cardHeader = document.createElement('div');
+        cardHeader.classList.add('card-header');
+        cardHeader.textContent = link.group;
+        cardHeader.addEventListener('click', () => toggleCard(card));
+
+        const cardContent = document.createElement('div');
+        cardContent.classList.add('card-content');
+
+        const title = document.createElement('h3');
+        title.textContent = link.title;
+        title.addEventListener('click', () => window.location.href = link.url);
+
+        const url = document.createElement('p');
+        url.innerHTML = `<a href="${link.url}" target="_blank">${link.url}</a>`;
+
+        const memo = document.createElement('p');
+        memo.textContent = link.memo;
+
+        cardContent.appendChild(title);
+        cardContent.appendChild(url);
+        cardContent.appendChild(memo);
+
+        card.appendChild(cardHeader);
+        card.appendChild(cardContent);
+
+        cardGroup.appendChild(card);
+    }
+});
+
+function toggleCard(card) {
+    card.classList.toggle('expanded');
+}
+
+function filterLinks() {
+    const filterInput = document.getElementById('filterInput');
+    const filterValue = filterInput.value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        if (title.includes(filterValue)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+
+</body>
 </html>

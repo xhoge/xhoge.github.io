@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xhoge</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    #basic-info {
+      background-color: #eee;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #container {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .topic-container {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      padding: 10px; /* 余白を追加 */
+    }
+
+    .topic {
+      flex: 0 0 auto;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-right: 20px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      color: #333;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .topic:hover {
+      text-decoration: underline;
+    }
+
+    #info-container {
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+    }
+
+    #info-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .info-item {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>xhoge</h1>
+</header>
+
+<div id="basic-info">
+  <h2>基本情報</h2>
+  <!-- ここに基本情報の内容を追加 -->
+</div>
+
+<div id="container">
+  <div class="topic-container" id="topic-container">
+    <div class="topic" onclick="showInfo('topic1')">題目1</div>
+    <div class="topic" onclick="showInfo('topic2')">題目2</div>
+    <div class="topic" onclick="showInfo('topic3')">題目3が非常に長い場合</div>
+    <!-- Add more topics as needed -->
+  </div>
+</div>
+
+<div id="info-container">
+  <ul id="info-list"></ul>
+</div>
+
+<script>
+  // Sample JSON data
+  const data = {
+    "topic1": [
+      {"項目名": "項目1", "名称": "名称1"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+      {"項目名": "項目2", "名称": "名称2"},
+    ],
+    "topic2": [
+      {"項目名": "項目3", "名称": "名称3"},
+      {"項目名": "項目4", "名称": "名称4"}
+    ],
+    "topic3": [
+      {"項目名": "項目5", "名称": "名称5"},
+      {"項目名": "項目6", "名称": "名称6"}
+    ]
+    // Add more data as needed
+  };
+
+  // Show initial info
+  showInfo('topic1');
+
+  function showInfo(topic) {
+    const infoContainer = document.getElementById('info-container');
+    const infoList = document.getElementById('info-list');
+    infoList.innerHTML = ''; // Clear previous info
+
+    if (data[topic]) {
+      data[topic].forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('info-item');
+        listItem.textContent = `${item["項目名"]}: ${item["名称"]}`;
+        infoList.appendChild(listItem);
+      });
+
+      infoContainer.style.display = 'block';
+    } else {
+      infoContainer.style.display = 'none';
+    }
+  }
+
+  // Make topics sticky on scroll
+  window.onscroll = function() {
+    const topicContainer = document.getElementById('topic-container');
+    const header = document.querySelector('header');
+    const basicInfo = document.getElementById('basic-info');
+    
+    const headerHeight = header.offsetHeight;
+    const basicInfoHeight = basicInfo.offsetHeight;
+
+    if (window.pageYOffset > headerHeight + basicInfoHeight) {
+      topicContainer.style.position = 'fixed';
+      topicContainer.style.top = `${headerHeight + basicInfoHeight}px`;
+    } else {
+      topicContainer.style.position = 'relative';
+      topicContainer.style.top = 'auto';
+    }
+  };
+</script>
+
+</body>
+</html>

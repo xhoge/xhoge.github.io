@@ -15,8 +15,9 @@
     header {
       background-color: #333;
       color: #fff;
-      text-align: center;
-      padding: 10px 0;
+      padding: 10px;
+      font-size:20px;
+      border-bottom:solid 2px #eee;
     }
 
     #basic-info {
@@ -28,30 +29,34 @@
     #container {
       overflow-x: auto;
       white-space: nowrap;
-      padding: 20px;
+      padding: 10px;
       text-align: center;
-      position: relative;
+      background: #eee;
+      
     }
 
     .topic-container {
       display: flex;
       flex-wrap: nowrap;
       justify-content: space-between;
-      padding: 10px; /* 余白を追加 */
+    }
+
+    .first-row {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
 
     .topic {
       flex: 0 0 auto;
-      padding: 10px 20px;
       cursor: pointer;
       font-size: 18px;
       margin-right: 20px;
-      border: 1px solid #ccc;
-      background-color: #fff;
-      color: #333;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      padding:10px;
     }
 
     .topic:hover {
@@ -60,11 +65,11 @@
 
     #info-container {
       margin-top: 20px;
-      display: none;
       text-align: center;
+      min-height: 100vh;
     }
 
-    #info-list {
+    .info-list {
       list-style: none;
       padding: 0;
     }
@@ -79,25 +84,23 @@
 <body>
 
 <header>
-  <h1>xhoge</h1>
+  <span>xhoge</span>
 </header>
 
 <div id="basic-info">
   <h2>基本情報</h2>
-  <!-- ここに基本情報の内容を追加 -->
 </div>
 
-<div id="container">
+<div id="container" class="first-row">
   <div class="topic-container" id="topic-container">
     <div class="topic" onclick="showInfo('topic1')">題目1</div>
     <div class="topic" onclick="showInfo('topic2')">題目2</div>
     <div class="topic" onclick="showInfo('topic3')">題目3が非常に長い場合</div>
-    <!-- Add more topics as needed -->
   </div>
 </div>
 
 <div id="info-container">
-  <ul id="info-list"></ul>
+  <!-- 各トピックに対応する info-list はここに追加されます -->
 </div>
 
 <script>
@@ -129,45 +132,53 @@
     // Add more data as needed
   };
 
-  // Show initial info
-  showInfo('topic1');
-
   function showInfo(topic) {
+    //this.classList.
     const infoContainer = document.getElementById('info-container');
-    const infoList = document.getElementById('info-list');
-    infoList.innerHTML = ''; // Clear previous info
+    
+    // Check if info-list already exists
+    const existingInfoList = document.getElementById(`info-list-${topic}`);
+    
+    if (existingInfoList) {
+      // If info-list already exists, adjust display
+      const allInfoLists = document.querySelectorAll('.info-list');
+      allInfoLists.forEach(list => {
+        list.style.display = (list === existingInfoList) ? 'block' : 'none';
+      });
+    } else {
+      // If info-list does not exist, create a new one
+      const infoList = document.createElement('ul');
+      infoList.id = `info-list-${topic}`;
+      infoList.classList.add('info-list');
+      infoList.style.listStyle = 'none';
+      infoList.style.padding = '0';
+      
+      const topicData = data[topic];
+      if (topicData) {
+        topicData.forEach(item => {
+          const listItem = document.createElement('li');
+          listItem.classList.add('info-item');
+          listItem.textContent = `${item["項目名"]}: ${item["名称"]}`;
+          infoList.appendChild(listItem);
+        });
+      }
 
-    if (data[topic]) {
-      data[topic].forEach(item => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('info-item');
-        listItem.textContent = `${item["項目名"]}: ${item["名称"]}`;
-        infoList.appendChild(listItem);
+      // Hide all other info-lists
+      const allInfoLists = document.querySelectorAll('.info-list');
+      allInfoLists.forEach(list => {
+        list.style.display = 'none';
       });
 
-      infoContainer.style.display = 'block';
-    } else {
-      infoContainer.style.display = 'none';
+      // Append new info-list to info-container
+      infoContainer.appendChild(infoList);
     }
+
+    // Adjust the display of info-container
+    infoContainer.style.display = 'block';
   }
 
-  // Make topics sticky on scroll
-  window.onscroll = function() {
-    const topicContainer = document.getElementById('topic-container');
-    const header = document.querySelector('header');
-    const basicInfo = document.getElementById('basic-info');
-    
-    const headerHeight = header.offsetHeight;
-    const basicInfoHeight = basicInfo.offsetHeight;
 
-    if (window.pageYOffset > headerHeight + basicInfoHeight) {
-      topicContainer.style.position = 'fixed';
-      topicContainer.style.top = `${headerHeight + basicInfoHeight}px`;
-    } else {
-      topicContainer.style.position = 'relative';
-      topicContainer.style.top = 'auto';
-    }
-  };
+  showInfo('topic1');
 </script>
 
 </body>

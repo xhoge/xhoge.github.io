@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="jp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./dist/css/animsition.css">
+
     <title>Link Page</title>
     <style>
         body {
@@ -64,8 +66,12 @@
 
 <input type="text" id="filterInput" placeholder="Filter by title..." oninput="filterLinks()">
 
-<div class="card-group" id="cardGroup"></div>
+<div
+ class="animsition card-group" id="cardGroup"></div>
 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+ <script src="./dist/js/animsition.min.js"></script>
+ 
 <script>
   const links = [
     {
@@ -73,8 +79,13 @@
         "title": "X",
         "url": "https://twitter.com/home",
         "memo": "Search engine"
+    },
+    {
+        "group": "プロフィール",
+        "title": "自己紹介",
+        "url": "./prof.html",
+        "memo": "プロフィール"
     }
-    // Add more links as needed
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -97,7 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
         title.addEventListener('click', () => window.location.href = link.url);
 
         const url = document.createElement('p');
-        url.innerHTML = `<a href="${link.url}" target="_blank">${link.url}</a>`;
+        url.innerHTML = `<a class="animsition-link" href="${link.url}" 
+        data-animsition-out-class="fade-out-right"
+        data-animsition-out-duration="2000"
+        >${link.url}</a>`;
 
         const memo = document.createElement('p');
         memo.textContent = link.memo;
@@ -111,6 +125,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cardGroup.appendChild(card);
     }
+
+
+    $(".animsition").animsition({
+    inClass: 'fade-in',
+    outClass: 'fade-out',
+    inDuration: 1500,
+    outDuration: 800,
+    linkElement: '.animsition-link',
+    // e.g. linkElement: 'a:not([target="_blank"]):not([href^="#"])'
+    loading: true,
+    loadingParentElement: 'body', //animsition wrapper element
+    loadingClass: 'animsition-loading',
+    loadingInner: '', // e.g '<img src="loading.svg" />'
+    timeout: false,
+    timeoutCountdown: 5000,
+    onLoadEvent: true,
+    browser: [ 'animation-duration', '-webkit-animation-duration'],
+    // "browser" option allows you to disable the "animsition" in case the css property in the array is not supported by your browser.
+    // The default setting is to disable the "animsition" in a browser that does not support "animation-duration".
+    overlay : false,
+    overlayClass : 'animsition-overlay-slide',
+    overlayParentElement : 'body',
+    transition: function(url){ window.location.href = url; }
+  });
 });
 
 function toggleCard(card) {
@@ -131,6 +169,7 @@ function filterLinks() {
         }
     });
 }
+
 </script>
 
 </body>

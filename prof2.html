@@ -1,73 +1,42 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="jp" >
 
 <head>
   <meta charset="UTF-8">
 
     <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
-  <title>CodePen - Material Design Tabs using Swiper</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css'>
-  
+  <title>Prof2</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-html,
-body {
-  min-height: 100%;
+
+.swiper {
+   margin: 0 auto 30px;
+}
+.tab-menu {
+   border-bottom: 1px solid #CCC;
+}
+.tab-menu .swiper-slide {
+   width: auto;
+   padding: 10px 0;
+}
+.tab-contents {
+   margin: 30px auto;
+   min-height:500px;
+}
+.swiper-slide-thumb-active {
+   border-bottom: 2px solid rgb(9, 8, 53);
+   color: rgb(9, 8, 53) !important;
+   font-weight: bold;
 }
 
-#pages-container {
-  height: 100vh;
-  border: 1px solid #dedede;
-}
-#pages-container .swiper-slide {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.tab-contents .swiper-slide {
+   width: auto;
+   height:calc(100vh - 150px);
 }
 
-#pages-container-inner {
-  overflow-x: hidden;
-  height: 100%;
-}
-
-#main-navigation ul {
-  list-style-type: none;
-  display: flex;
-  margin: 0;
-}
-#main-navigation ul .nav-link {
-  padding: 10px;
-  flex-grow: 1;
-  text-align: center;
-  cursor: pointer;
-}
-
-.links-container {
-  position: relative;
-  padding: 0;
-}
-
-.swiper-scrollbar {
-  height: 3px;
-  background-color: transparent;
-  opacity: 1 !important;
-}
-
-.swiper-scrollbar-drag {
-  background-color: red;
-  border-radius: 0;
-  top: -4px;
-}
-.first-row {
-      display: flex;
-      position: sticky;
-      top: 0;
-      z-index: 2;
-    }
-
-    header {
+header {
       background-color: #333;
       color: #fff;
       padding: 10px;
@@ -85,7 +54,6 @@ body {
 </head>
 
 <body translate="no">
-
     <header>
         <span>xhoge</span>
       </header>
@@ -93,43 +61,55 @@ body {
       <div id="basic-info">
         <h2>基本情報</h2>
       </div>
-
-  <nav id="main-navigation">
-	<ul class="links-container">
-		<li class="nav-link active">T1</li>
-		<li class="nav-link">T2</li>
-		<li class="nav-link">T3</li>
-		<li class="nav-link">T4</li>
-		<li class="nav-link">T5</li>
-	</ul>
-</nav>
-<article id="pages-container">
-  <div class="swiper-scrollbar"></div>
-	<article id="pages-container-inner">
-		<div class="swiper-wrapper">
-			<div class="swiper-slide">#1</div>
-			<div class="swiper-slide">#2</div>
-			<div class="swiper-slide">#3</div>
-			<div class="swiper-slide">#4</div>
-			<div class="swiper-slide">#5</div>
-		</div>
-	</article>
-</article>
+    <div class="container">
+        <!-- Swiper -->
+        <div class="swiper tab-menu">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">トップ</div>
+                <div class="swiper-slide">ランキング</div>
+                <div class="swiper-slide">国内</div>
+                <div class="swiper-slide">エンタメ</div>
+                <div class="swiper-slide">スポーツ</div>
+                <div class="swiper-slide">経済</div>
+            </div>
+        </div>
+        <div class="swiper tab-contents">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">トップ</div>
+                <div class="swiper-slide">ランキング</div>
+                <div class="swiper-slide">国内</div>
+                <div class="swiper-slide">エンタメ</div>
+                <div class="swiper-slide">スポーツ</div>
+                <div class="swiper-slide">経済</div>
+            </div>
+        </div>
+</div>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js'></script>
-      <script id="rendered-js" >
-// create the swiper instance
-var pagesContainer = new Swiper('#pages-container-inner', {
-  slidesPerView: 1,
-  watchSlidesProgress: true,
-  scrollbar: '.swiper-scrollbar'
- });
-
-$('.nav-link').on('click', function () {
-  $(this).addClass('active');
-  pagesContainer.slideTo($('.nav-link').index($(this)));
-});
-    </script>
+  <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+  <script>
+    const galleryThumbs = new Swiper('.tab-menu', {
+      spaceBetween: 30,
+      slidesPerView: 'auto',
+      watchSlidesVisibility: true,
+      watchSlidesProgress: true,
+      slideActiveClass: 'swiper-slide-active'
+    });
+    galleryThumbs.on('tap', function () {
+      const current = galleryTop.activeIndex;
+      galleryThumbs.slideTo(current, 500, true);
+    });
+    const galleryTop = new Swiper('.tab-contents', {
+      autoHeight: true,
+      thumbs: {
+        swiper: galleryThumbs
+      },
+      on: {
+          slideChange: function (swipe) {
+            console.log(swipe.activeIndex);
+          },
+      }
+  });
+  </script>
 
   
 </body>

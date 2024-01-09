@@ -11,12 +11,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 
+body{
+    background: #eee;
+}
+
 .swiper {
-   margin: 0 auto 20px;
+   margin: 0 auto 0px;
 }
 .tab-menu {
    border-top: 1px solid #CCC;
    background: #fff;
+   padding:10px;
 }
 .tab-menu .swiper-slide {
    width: auto;
@@ -44,17 +49,19 @@ header {
   color: #fff;
   padding: 10px;
   font-size:20px;
-  border-bottom:solid 2px #5f5f5f;
+  border-bottom:solid 4px rgb(197, 32, 32);
+  font-weight: bold;
 }
 #content-header {
-  height:50px;
+  height:60px;
 }
 .item {
   padding:10px;
   width:calc(100% -20px);
 }
 .item-header{
-  font-size:18px;
+  font-size:15px;
+  font-weight: 900;
 }
 .item-body{
 }
@@ -74,18 +81,50 @@ bottom: 0;
 left: 0;
 z-index: 1030;
 }
+/*
+.view-status{
+    border:solid 3px rgb(235, 163, 31);
+    margin:5px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+}
+
+.view-status-header{
+    background-color:rgb(235, 163, 31);
+    width:40%;
+    text-align: center;
+    padding:5px;
+    font-size:20px;
+}
+
+.view-status-body{
+    width:60%;
+    text-align: center;
+    padding:5px;
+    font-size:20px;
+}
+*/
 
 .view-status{
-    background-color:rgb(241, 177, 58);
+    border-left:solid 20px;
+    border-right:solid 3px;
+    border-bottom:solid 3px;
+    border-top:solid 3px; 
+    border-color:rgb(235, 163, 31);
     margin:5px;
-    padding:5px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    border-radius: 3px;
+    width:50%;
+    background:#fff;
 }
 
 .view-status-label{
     font-weight: 900;
     font-size:20px;
-    border:solid 1px;
     width:calc(100% -4px);
     padding:5px;
     border-radius: 2px;
@@ -94,20 +133,17 @@ z-index: 1030;
 
 .info-section{
     height: 100%;
-    width:calc(100% - 10px);
-    margin:5px;
-    
+    width:calc(100% - 40px);
+    margin:10px;
+   padding:10px;
+   border-radius:10px;
+   background: #fff;
 }
 
 .section-title{
-    border-left:solid 10px;
-    border-top:solid 2px;
-    border-right:solid 2px;
-    border-bottom:solid 2px;
-    border-color: rgb(42, 42, 77);
-    margin:5px;
+    color:#fff;
+    background: #333;
     padding:10px;
-    border-radius: 3px;
 }
 
 .section-title-label{
@@ -125,15 +161,17 @@ z-index: 1030;
       
       <div id="content-header">
         <div class="view-status">
-            <div class="view-status-label">ステータス</div>
+            <div class="view-status-label">対応中</div>
         </div>
       </div>
     <div class="container">
         <div class="swiper tab-contents">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                    <div class="section-title"><span class="section-title-label">タイトル</span></div>
-                  <section class="info-section">
+                    <div class="section-title">
+                        <span class="section-title-label">タイトル</span>
+                    </div>
+                    <section class="info-section">
                     <div class="item">
                         <div class="item-header">
                           入力項目１
@@ -168,11 +206,191 @@ z-index: 1030;
                       </div>
                   </section>
                 </div>
-                <div class="swiper-slide">ランキング</div>
-                <div class="swiper-slide">国内</div>
-                <div class="swiper-slide">エンタメ</div>
-                <div class="swiper-slide">スポーツ</div>
-                <div class="swiper-slide">経済</div>
+                <div class="swiper-slide"><div class="section-title">
+                    <span class="section-title-label">タイトル</span>
+                </div>
+                <section class="info-section">
+                <div class="item">
+                    <div class="item-header">
+                      入力項目１
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目２
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目３
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目４
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+              </section></div>
+                <div class="swiper-slide"><div class="section-title">
+                    <span class="section-title-label">タイトル</span>
+                </div>
+                <section class="info-section">
+                <div class="item">
+                    <div class="item-header">
+                      入力項目１
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目２
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目３
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目４
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+              </section></div>
+                <div class="swiper-slide"><div class="section-title">
+                    <span class="section-title-label">タイトル</span>
+                </div>
+                <section class="info-section">
+                <div class="item">
+                    <div class="item-header">
+                      入力項目１
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目２
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目３
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目４
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+              </section></div>
+                <div class="swiper-slide"><div class="section-title">
+                    <span class="section-title-label">タイトル</span>
+                </div>
+                <section class="info-section">
+                <div class="item">
+                    <div class="item-header">
+                      入力項目１
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目２
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目３
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目４
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+              </section></div>
+                <div class="swiper-slide"><div class="section-title">
+                    <span class="section-title-label">タイトル</span>
+                </div>
+                <section class="info-section">
+                <div class="item">
+                    <div class="item-header">
+                      入力項目１
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目２
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目３
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-header">
+                      入力項目４
+                    </div>
+                    <div class="item-body">
+                      <input type="text" class="mobile-item-input-txt" value="">  
+                    </div>
+                  </div>
+              </section></div>
             </div>
         </div>
         <div class="swiper tab-menu fixed-bottom">

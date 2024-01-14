@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>出荷状態のステータス表示</title>
+    <style>
+        /* ここにCSSを埋め込む */
+        body {
+            font-family: Arial, sans-serif;
+            margin:0;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .section-header {
+            background-color: #f2f2f2;
+            padding: 10px;
+            margin: 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+
+        .section-container {
+            padding: 20px;
+        }
+
+        .section-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .section-item {
+            background-color: #f9f9f9;
+            margin-bottom: 1px; /* 横線をシンプルにするための調整 */
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .section-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            animation: fadeIn 0.5s;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { top: -300px; opacity: 0; }
+            to { top: 0; opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>出荷状態</h1>
+        <p>ステータス: 配送中</p>
+    </div>
+
+    
+    <div class="section-container">
+        <div class="section-header">
+            <h2>注文詳細</h2>
+        </div>
+        <ul class="section-list">
+            <li class="section-item" data-modal="modal1">
+                東京都新宿区... <span class="right-arrow">&gt;</span>
+            </li>
+            <!-- その他の住所項目 -->
+        </ul>
+    </div>
+
+    <!-- モーダルウィンドウ -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>東京都新宿区の詳細情報...</p>
+        </div>
+    </div>
+
+    <!-- その他のモーダルウィンドウ -->
+
+    <script>
+            // ここにJavaScriptを埋め込む
+    document.querySelectorAll('.section-item').forEach(item => {
+        item.onclick = function() {
+            var modal = document.getElementById(this.getAttribute('data-modal'));
+            modal.style.display = 'block';
+        }
+    });
+
+    document.querySelectorAll('.close').forEach(close => {
+        close.onclick = function() {
+            this.parentElement.parentElement.style.display = 'none';
+        }
+    });
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>

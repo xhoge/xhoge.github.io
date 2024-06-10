@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple File Uploader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .upload-container {
+            width: 300px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        label {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #fileList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .file-item button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007BFF;
+            font-size: 14px;
+        }
+
+        .file-item button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <input type="file" id="fileInput" multiple>
+        <label for="fileInput">Choose Files</label>
+        <ul id="fileList"></ul>
+    </div>
+    <script>
+        let selectedFiles = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+
+            fileInput.addEventListener('change', () => {
+                const files = Array.from(fileInput.files);
+                selectedFiles = selectedFiles.concat(files);
+                updateFileList();
+                fileInput.value = ''; // Reset file input to allow re-selection of the same file
+            });
+        });
+
+        function updateFileList() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+
+            selectedFiles.forEach((file, index) => {
+                const li = document.createElement('li');
+                li.className = 'file-item';
+                li.innerHTML = `
+                    <span>${file.name}</span>
+                    <div>
+                        <button onclick="downloadFile(${index})">⬇️</button>
+                        <button onclick="deleteFile(${index})">🗑️</button>
+                    </div>
+                `;
+                fileList.appendChild(li);
+            });
+        }
+
+        function downloadFile(index) {
+            const file = selectedFiles[index];
+            const url = URL.createObjectURL(file);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function deleteFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+    </script>
+</body>
+</html>
